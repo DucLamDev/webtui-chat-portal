@@ -1,0 +1,16 @@
+{
+  "platform": "android",
+  "package_name": "com.vpsttt.webtui_chat",
+  "channel": "stable",
+  "current_version": "1.0.1",
+  "latest_version": "1.0.1",
+  "minimum_version": "1.0.1",
+  "recommended_version": "1.0.1",
+  "version": "1.0.1",
+  "version_code": 101,
+  "download_url": "https://chat.vpsttt.com/downloads/files/android/stable/app-prod-release.apk",
+  "store_url": "",
+  "checksum_sha256": "C3FDD48496304DAAAA02BE7446FF74677C6B6B75A556029A6FD73CB29C542B47",
+  "required": false,
+  "release_notes": "Production Android release 1.0.1."
+}

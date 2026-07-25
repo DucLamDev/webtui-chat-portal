@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.next/
+node_modules/
+playwright-report/
+test-results/
+*.log
+*.tsbuildinfo
+download/**/*.apk
+download/**/*.aab
+download/**/*.ipa
+*.key
+*.pem
+*.p12
+*.pfx

@@ -1,0 +1,9 @@
+.next
+node_modules
+tests
+playwright-report
+test-results
+deploy
+download
+*.log
+*.tsbuildinfo

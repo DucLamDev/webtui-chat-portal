@@ -1,0 +1,35 @@
+{
+	email {$LETSENCRYPT_EMAIL}
+	admin off
+}
+
+{$PORTAL_DOMAIN} {
+	encode zstd gzip
+
+	redir {$PORTAL_BASE_PATH} {$PORTAL_BASE_PATH}/ 308
+	redir /download /download/ 308
+
+	handle {$PORTAL_BASE_PATH}/* {
+		reverse_proxy portal:3002
+	}
+
+	handle_path /download/* {
+		root * /srv/download
+		file_server
+	}
+
+	handle_path /downloads/files/* {
+		root * /srv/download
+		file_server
+	}
+
+	respond "Not found" 404
+
+	header {
+		-Server
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+}
