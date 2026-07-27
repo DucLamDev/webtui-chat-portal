@@ -6,12 +6,7 @@
 {$PORTAL_DOMAIN} {
 	encode zstd gzip
 
-	redir {$PORTAL_BASE_PATH} {$PORTAL_BASE_PATH}/ 308
 	redir /download /download/ 308
-
-	handle {$PORTAL_BASE_PATH}/* {
-		reverse_proxy portal:3002
-	}
 
 	handle_path /download/* {
 		root * /srv/download
@@ -23,7 +18,9 @@
 		file_server
 	}
 
-	respond "Not found" 404
+	handle {
+		reverse_proxy portal:3002
+	}
 
 	header {
 		-Server

@@ -8,9 +8,9 @@ RUN npm ci
 
 FROM deps AS build
 
-ARG NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL=https://download.webtuichat.com/desktop
-ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL=https://download.webtuichat.com/mobile
-ARG NEXT_PUBLIC_DOCUMENTATION_URL=https://docs.webtuichat.com
+ARG NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL=https://download.vpsttt.com/download/
+ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL=https://download.vpsttt.com/download/
+ARG NEXT_PUBLIC_DOCUMENTATION_URL=https://download.vpsttt.com/#self-host
 ARG NEXT_PUBLIC_PORTAL_BASE_PATH=
 ENV NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL=$NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL
 ENV NEXT_PUBLIC_MOBILE_DOWNLOAD_URL=$NEXT_PUBLIC_MOBILE_DOWNLOAD_URL
@@ -27,10 +27,13 @@ ARG NEXT_PUBLIC_PORTAL_BASE_PATH=
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3002
+ENV HOSTNAME=0.0.0.0
 ENV NEXT_PUBLIC_PORTAL_BASE_PATH=$NEXT_PUBLIC_PORTAL_BASE_PATH
 
-COPY --from=build /app ./
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/.next/static ./.next/static
+COPY --from=build /app/public ./public
 
 EXPOSE 3002
 
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]

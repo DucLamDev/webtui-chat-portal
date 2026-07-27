@@ -11,13 +11,13 @@ import { DomainOnboarding } from "@/components/domain-onboarding";
 
 const desktopDownloadUrl =
   process.env.NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL ??
-  "https://download.webtuichat.com/desktop";
+  "https://download.vpsttt.com/download/";
 const mobileDownloadUrl =
   process.env.NEXT_PUBLIC_MOBILE_DOWNLOAD_URL ??
-  "https://download.webtuichat.com/mobile";
+  "https://download.vpsttt.com/download/";
 const documentationUrl =
   process.env.NEXT_PUBLIC_DOCUMENTATION_URL ??
-  "https://docs.webtuichat.com";
+  "https://download.vpsttt.com/#self-host";
 const portalBasePath = process.env.NEXT_PUBLIC_PORTAL_BASE_PATH ?? "";
 
 export default function PortalHomePage() {
