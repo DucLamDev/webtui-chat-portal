@@ -25,7 +25,7 @@ export default function PortalHomePage() {
     <main>
       <header className="site-header">
         <a className="brand" href={portalBasePath || "/"} aria-label="WebTUI Chat Portal">
-          <img alt="" src={`${portalBasePath}/brand/logo_webtui.png`} />
+          <img alt="" height="42" src={`${portalBasePath}/brand/logo_webtui.png`} width="42" />
           <span><strong>WebTUI Chat</strong><small>Self-hosted portal</small></span>
         </a>
         <nav aria-label="Điều hướng chính">
@@ -88,6 +88,7 @@ export default function PortalHomePage() {
       <footer>
         <span>WebTUI Chat</span>
         <p>Portal không lưu nội dung chat, mật khẩu hoặc token của instance.</p>
+        <a href={`${portalBasePath}/account-deletion`}>Xóa tài khoản</a>
       </footer>
     </main>
   );

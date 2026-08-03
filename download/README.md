@@ -10,7 +10,9 @@ Play links are added later through the manifest `store_url`.
 - `styles.css`: responsive visual design.
 - `app.js`: reads release metadata.
 - `assets/android-chat-preview.png`: mobile UI preview used on the page.
-- `privacy.html`: minimal privacy/support page for the Android channel.
+- `privacy.html`: public privacy policy for store listings.
+- `account-deletion.html`: public account-deletion request path required by
+  mobile store policies (also exposed as `/account-deletion` by Caddy).
 
 ## Expected Android Files
 

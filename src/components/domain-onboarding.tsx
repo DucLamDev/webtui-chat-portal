@@ -14,6 +14,8 @@ import {
   type PortalServer
 } from "@/lib/server-registration";
 
+const discoveryCacheTtlMs = 60_000;
+
 type SubmissionState =
   | { status: "idle" }
   | { status: "checking" }
@@ -31,7 +33,17 @@ export function DomainOnboarding() {
     setSubmission({ status: "checking" });
 
     try {
+      if (!navigator.onLine) {
+        throw new Error("Thiết bị đang ngoại tuyến. Hãy kiểm tra kết nối mạng rồi thử lại.");
+      }
       const target = normalizePortalServer(domain);
+      const cachedPayload = readCachedDiscovery(target.origin);
+      if (cachedPayload) {
+        const server = parsePortalDiscovery(cachedPayload, target.origin);
+        setSubmission({ server, status: "ready" });
+        window.location.assign(server.entryUrl);
+        return;
+      }
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), 12_000);
       let response: Response;
@@ -39,7 +51,10 @@ export function DomainOnboarding() {
         const discoveryUrl = new URL("/api/v1/discovery", target.origin);
         discoveryUrl.searchParams.set("domain", target.domain);
         response = await fetch(discoveryUrl, {
+          cache: "no-store",
+          credentials: "omit",
           headers: { Accept: "application/json" },
+          redirect: "error",
           signal: controller.signal
         });
       } finally {
@@ -50,8 +65,9 @@ export function DomainOnboarding() {
         throw new Error(serverErrorMessage(payload));
       }
       const server = parsePortalDiscovery(payload, target.origin);
+      cacheDiscovery(target.origin, payload);
       setSubmission({ server, status: "ready" });
-      window.setTimeout(() => window.location.assign(server.entryUrl), 450);
+      window.location.assign(server.entryUrl);
     } catch (error) {
       const message =
         error instanceof DOMException && error.name === "AbortError"
@@ -78,7 +94,11 @@ export function DomainOnboarding() {
         </div>
       </div>
 
-      <form className="domain-form" onSubmit={handleSubmit}>
+      <form
+        aria-busy={submission.status === "checking"}
+        className="domain-form"
+        onSubmit={handleSubmit}
+      >
         <label htmlFor="company-domain">Domain WebTUI Chat</label>
         <div className="domain-input">
           <Globe2 aria-hidden="true" size={20} />
@@ -86,6 +106,12 @@ export function DomainOnboarding() {
             autoCapitalize="none"
             autoComplete="url"
             disabled={submission.status === "checking"}
+            aria-describedby={
+              submission.status === "error" || submission.status === "ready"
+                ? "domain-help domain-status"
+                : "domain-help"
+            }
+            aria-invalid={submission.status === "error"}
             id="company-domain"
             onChange={(event) => {
               setDomain(event.target.value);
@@ -111,13 +137,17 @@ export function DomainOnboarding() {
           </button>
         </div>
 
+        <p className="domain-help" id="domain-help">
+          Ví dụ: chat.company.com. Portal chỉ dùng domain để kiểm tra instance.
+        </p>
+
         {submission.status === "error" ? (
-          <p className="form-message form-message--error" role="alert">
+          <p className="form-message form-message--error" id="domain-status" role="alert">
             {submission.message}
           </p>
         ) : null}
         {submission.status === "ready" ? (
-          <div className="server-result" role="status">
+          <div className="server-result" id="domain-status" role="status">
             <Building2 aria-hidden="true" size={20} />
             <span>
               <strong>{submission.server.name}</strong>
@@ -131,6 +161,41 @@ export function DomainOnboarding() {
       </form>
     </section>
   );
+}
+
+function readCachedDiscovery(origin: string): unknown | null {
+  try {
+    const raw = window.sessionStorage.getItem(discoveryCacheKey(origin));
+    if (!raw) {
+      return null;
+    }
+    const cached = JSON.parse(raw) as { checkedAt?: unknown; payload?: unknown };
+    if (
+      typeof cached.checkedAt !== "number" ||
+      Date.now() - cached.checkedAt > discoveryCacheTtlMs
+    ) {
+      window.sessionStorage.removeItem(discoveryCacheKey(origin));
+      return null;
+    }
+    return cached.payload ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function cacheDiscovery(origin: string, payload: unknown) {
+  try {
+    window.sessionStorage.setItem(
+      discoveryCacheKey(origin),
+      JSON.stringify({ checkedAt: Date.now(), payload })
+    );
+  } catch {
+    // Storage can be unavailable in hardened/private browser modes.
+  }
+}
+
+function discoveryCacheKey(origin: string) {
+  return `webtui:portal-discovery:${origin}`;
 }
 
 function serverErrorMessage(payload: unknown): string {

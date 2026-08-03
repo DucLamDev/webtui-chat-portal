@@ -284,6 +284,33 @@ code {
   line-height: 1.05;
 }
 
+.policy-page h2 {
+  margin: 30px 0 10px;
+  font-size: 21px;
+}
+
+.policy-page .release-notes > div:last-child {
+  max-width: 780px;
+}
+
+.policy-page ul {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.policy-page li + li {
+  margin-top: 8px;
+}
+
+.policy-page a:not(.button) {
+  color: var(--blue-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .site-footer {
   justify-content: space-between;
   gap: 16px;

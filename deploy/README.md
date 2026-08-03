@@ -34,8 +34,8 @@ Ví dụ:
 sudo mkdir -p /opt/vpsttt-suite
 sudo chown "$USER":"$USER" /opt/vpsttt-suite
 cd /opt/vpsttt-suite
-git clone <SELF_HOST_REPOSITORY_URL> webtui-chat-self-host
-git clone <PORTAL_REPOSITORY_URL> webtui-chat-portal
+git clone https://github.com/DucLamDev/webtui-chat-self-host.git webtui-chat-self-host
+git clone https://github.com/DucLamDev/webtui-chat-portal.git webtui-chat-portal
 ```
 
 ## 3. Cấu hình production

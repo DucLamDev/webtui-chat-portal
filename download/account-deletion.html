@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Yêu cầu xóa tài khoản và dữ liệu WebTUI Chat."
+    />
+    <title>Xóa tài khoản | WebTUI Chat</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="./index.html" aria-label="WebTUI Chat">
+        <span class="brand-mark">W</span>
+        <span>WebTUI Chat</span>
+      </a>
+      <nav class="top-nav" aria-label="Liên kết hỗ trợ">
+        <a href="./privacy.html">Quyền riêng tư</a>
+        <a href="mailto:support@vpsttt.com">Hỗ trợ</a>
+      </nav>
+    </header>
+
+    <main class="policy-page">
+      <section class="release-notes deletion-page">
+        <div>
+          <p class="eyebrow">Quyền kiểm soát dữ liệu</p>
+          <h1>Xóa tài khoản WebTUI Chat</h1>
+          <p>Không gửi mật khẩu, mã OTP, access token hoặc refresh token.</p>
+        </div>
+        <div>
+          <h2>Cách nhanh nhất: xóa ngay trong app</h2>
+          <ol class="steps">
+            <li>Mở <strong>Cài đặt → Quyền riêng tư & phiên đăng nhập</strong>.</li>
+            <li>Chọn <strong>Xóa tài khoản</strong>.</li>
+            <li>
+              Nếu đang là owner, nhập email của một thành viên active để hệ
+              thống chuyển quyền sở hữu an toàn.
+            </li>
+            <li>Đọc phạm vi dữ liệu, nhập <strong>DELETE</strong> và xác nhận.</li>
+          </ol>
+          <p>
+            Sau khi server xác nhận, app thu hồi phiên, token push và xóa dữ
+            liệu đăng nhập/cache cục bộ. Hành động không thể hoàn tác.
+          </p>
+
+          <h2>Không còn cài hoặc không mở được app?</h2>
+          <p>
+            Gửi yêu cầu từ email của tài khoản. Trong nội dung chỉ cần ghi
+            <strong>domain server self-hosted</strong> (ví dụ
+            <code>chat.company.com</code>) và <strong>email/tên đăng nhập</strong>.
+            Với instance do tổ chức quản lý, quản trị viên của domain là bên có
+            quyền xử lý trực tiếp; bộ phận hỗ trợ app sẽ hướng dẫn hoặc chuyển
+            yêu cầu tới đúng operator khi có thông tin liên hệ.
+          </p>
+          <a
+            class="button primary deletion-request"
+            href="mailto:support@vpsttt.com?subject=Y%C3%AAu%20c%E1%BA%A7u%20x%C3%B3a%20t%C3%A0i%20kho%E1%BA%A3n%20WebTUI%20Chat&amp;body=Domain%20server%3A%20%0AEmail%20ho%E1%BA%B7c%20t%C3%AAn%20%C4%91%C4%83ng%20nh%E1%BA%ADp%3A%20%0A%0AT%C3%B4i%20y%C3%AAu%20c%E1%BA%A7u%20x%C3%B3a%20t%C3%A0i%20kho%E1%BA%A3n%20v%C3%A0%20d%E1%BB%AF%20li%E1%BB%87u%20li%C3%AAn%20k%E1%BA%BFt."
+          >Tạo email yêu cầu xóa</a>
+
+          <h2>Dữ liệu bị xóa hoặc thu hồi</h2>
+          <ul>
+            <li>Hồ sơ và thông tin xác thực của tài khoản.</li>
+            <li>Phiên đăng nhập, danh sách thiết bị và token FCM/APNs.</li>
+            <li>Tư cách thành viên, presence, tùy chọn và con trỏ đồng bộ.</li>
+            <li>Cache, token và dữ liệu phiên lưu trên thiết bị hiện tại.</li>
+          </ul>
+
+          <h2>Dữ liệu có thể được giữ lại</h2>
+          <p>
+            Tin nhắn, file hoặc audit thuộc hồ sơ của tổ chức có thể được giữ ở
+            dạng không còn liên kết tới hồ sơ người dùng theo chính sách lưu trữ
+            hay nghĩa vụ pháp lý của operator. Bản backup hết hiệu lực theo chu
+            kỳ backup của instance và không được dùng để khôi phục riêng tài
+            khoản đã xóa. Operator phải thông báo thời hạn cụ thể khi phản hồi.
+          </p>
+
+          <h2>Xác minh yêu cầu</h2>
+          <p>
+            Để tránh xóa nhầm, operator có thể yêu cầu xác minh quyền sở hữu
+            email hoặc tài khoản nhưng không bao giờ cần mật khẩu/token. Nếu
+            tài khoản đang là owner, việc chuyển quyền và xóa tài khoản được
+            thực hiện trong cùng một giao dịch; người nhận phải là thành viên
+            active. Người dùng vẫn có thể gửi yêu cầu tới operator nếu không còn
+            thành viên phù hợp.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>WebTUI Chat</span>
+      <a href="mailto:support@vpsttt.com">support@vpsttt.com</a>
+    </footer>
+  </body>
+</html>

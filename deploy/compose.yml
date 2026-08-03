@@ -9,7 +9,8 @@ services:
         NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL: ${DESKTOP_DOWNLOAD_URL}
         NEXT_PUBLIC_DOCUMENTATION_URL: ${DOCUMENTATION_URL}
         NEXT_PUBLIC_MOBILE_DOWNLOAD_URL: ${MOBILE_DOWNLOAD_URL}
-        NEXT_PUBLIC_PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-/portal}
+        NEXT_PUBLIC_PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-}
+        NEXT_PUBLIC_SUPPORT_EMAIL: ${SUPPORT_EMAIL:-support@vpsttt.com}
     image: webtui-chat-portal:${PORTAL_VERSION:-latest}
     restart: unless-stopped
     expose: ["3002"]
@@ -20,7 +21,7 @@ services:
     restart: unless-stopped
     environment:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
-      PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-/portal}
+      PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-}
       PORTAL_DOMAIN: ${PORTAL_DOMAIN}
     ports:
       - "80:80"

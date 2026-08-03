@@ -7,6 +7,8 @@
 	encode zstd gzip
 
 	redir /download /download/ 308
+	redir /account-deletion /download/account-deletion.html 308
+	redir /privacy /download/privacy.html 308
 
 	handle_path /download/* {
 		root * /srv/download
