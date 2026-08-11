@@ -10,16 +10,54 @@ permissions:
 
 jobs:
   verify:
+    name: Verify (${{ matrix.profile }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - profile: play-only
+            enable_ios_association: "false"
+            apple_bundle_id: ""
+            apple_team_id: ""
+          - profile: ios-enabled
+            enable_ios_association: "true"
+            apple_bundle_id: com.vpsttt.webtuiChat
+            apple_team_id: ABCDE12345
+    env:
+      ACCOUNT_DELETION_COMPLETION_DAYS: "30"
+      APPLE_BUNDLE_ID: ${{ matrix.apple_bundle_id }}
+      APPLE_TEAM_ID: ${{ matrix.apple_team_id }}
+      APP_LINK_ORIGIN: https://chat.ci.invalid
+      DESKTOP_DOWNLOAD_URL: https://portal.ci.invalid/download/
+      DOCUMENTATION_URL: https://portal.ci.invalid/docs/
+      ENABLE_IOS_ASSOCIATION: ${{ matrix.enable_ios_association }}
+      LEGAL_ENTITY_ADDRESS: 123 CI Validation Street
+      LEGAL_ENTITY_COUNTRY: Vietnam
+      LEGAL_ENTITY_NAME: WebTUI CI Validation Operator
+      MOBILE_DOWNLOAD_URL: https://play.google.com/store/apps/details?id=com.vpsttt.webtui_chat
+      MODERATION_EVIDENCE_RETENTION_DAYS: "365"
+      PLAY_APP_SIGNING_SHA256_FINGERPRINTS: 00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F:10:11:12:13:14:15:16:17:18:19:1A:1B:1C:1D:1E:1F
+      POLICY_EFFECTIVE_DATE: 2026-08-07
+      POLICY_VERSION: 2026-08-07
+      PORTAL_ORIGIN: https://portal.ci.invalid
+      PRIVACY_CONTACT_EMAIL: privacy@vpsttt.invalid
+      SAFETY_CONTACT_EMAIL: safety@vpsttt.invalid
+      SUPPORT_EMAIL: support@vpsttt.invalid
+      SUPPORT_RESPONSE_HOURS: "72"
+      UGC_REPORT_RESPONSE_HOURS: "72"
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 24
           cache: npm
       - run: npm ci
       - run: npm audit --audit-level=high
+      - run: npm run assets:check
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e

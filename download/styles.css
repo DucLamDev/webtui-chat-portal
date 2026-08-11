@@ -182,6 +182,10 @@ h2 {
   font-weight: 760;
 }
 
+.button[hidden] {
+  display: none;
+}
+
 .button.primary {
   background: var(--primary);
   color: #fff;

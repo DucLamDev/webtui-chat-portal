@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Tải WebTui Chat cho Android bằng APK signed chính thức, kèm SHA-256 và release notes."
+      content="Tải WebTui Chat cho Android qua kênh Google Play đã xác minh."
     />
     <title>Tải WebTui Chat cho Android</title>
     <link rel="stylesheet" href="./styles.css" />
@@ -26,11 +26,11 @@
     <main>
       <section class="hero" id="android">
         <div class="hero-copy">
-          <p class="eyebrow">Android direct download</p>
+          <p class="eyebrow">Android · Play-first</p>
           <h1>Tải WebTui Chat cho Android</h1>
           <p class="lead">
-            Bản APK signed dành cho đội nội bộ và khách hàng thử nghiệm trước
-            khi phát hành chính thức trên CH Play.
+            Kênh production ưu tiên CH Play. APK trực tiếp chỉ xuất hiện khi có
+            cùng chứng chỉ app-signing mà Google Play dùng để phát hành.
           </p>
 
           <div class="release-panel" aria-live="polite">
@@ -49,17 +49,16 @@
           </div>
 
           <div class="actions">
-            <a class="button primary" id="apkLink" href="#" download>
-              Tải APK Android
-            </a>
-            <a class="button secondary" id="storeLink" href="#" hidden>
+            <a class="button primary" id="storeLink" href="#" hidden>
               Mở trên CH Play
+            </a>
+            <a class="button secondary" id="apkLink" href="#" download hidden>
+              Tải APK đã xác minh
             </a>
           </div>
 
-          <p class="install-note">
-            Chỉ cài APK từ domain này hoặc link Firebase/CH Play được đội phát
-            hành gửi chính thức.
+          <p class="install-note" id="distributionStatus">
+            Đang kiểm tra kênh phân phối production.
           </p>
         </div>
 
@@ -76,8 +75,8 @@
 
       <section class="trust-strip" aria-label="Bảo đảm phát hành">
         <div>
-          <strong>APK signed</strong>
-          <span>Không phát hành APK debug hoặc unsigned.</span>
+          <strong>Signer đồng nhất</strong>
+          <span>Không public APK chỉ được ký bằng upload key.</span>
         </div>
         <div>
           <strong>SHA-256 công khai</strong>
@@ -85,7 +84,7 @@
         </div>
         <div>
           <strong>Manifest version</strong>
-          <span>Trang đọc metadata từ artifact CI.</span>
+          <span>Trang chỉ mở liên kết vượt qua gate phát hành.</span>
         </div>
       </section>
 
@@ -104,19 +103,19 @@
           <p class="eyebrow">Cách cài</p>
           <h2>4 bước cho Android</h2>
           <ol class="steps">
-            <li>Tải APK từ nút Android ở đầu trang.</li>
-            <li>Cho phép cài app từ trình duyệt hoặc file manager tin cậy.</li>
-            <li>Đối chiếu SHA-256 nếu đây là build gửi cho tester.</li>
+            <li>Mở liên kết CH Play ở đầu trang.</li>
+            <li>Cài bản thuộc đúng package WebTUI Chat.</li>
+            <li>Với fallback B2B, đối chiếu SHA-256 và signer trước khi cài.</li>
             <li>Mở app, đăng nhập và chọn workspace của bạn.</li>
           </ol>
         </article>
 
         <article class="info-card">
-          <p class="eyebrow">CH Play sau</p>
-          <h2>Khi store sẵn sàng</h2>
+          <p class="eyebrow">Kênh production</p>
+          <h2>CH Play là mặc định</h2>
           <p>
-            Trang này sẽ ưu tiên link CH Play khi manifest có `store_url`. APK
-            trực tiếp vẫn được giữ làm fallback cho nội bộ hoặc khách hàng B2B.
+            APK trực tiếp chỉ là fallback B2B và chỉ hiện khi signer trùng chính
+            xác chứng chỉ Play app-signing; upload-key APK không đủ điều kiện.
           </p>
         </article>
       </section>
@@ -132,8 +131,11 @@
 
     <footer class="site-footer" id="support">
       <span>WebTui Chat Android</span>
-      <a href="./privacy.html">Chính sách riêng tư</a>
-      <a href="mailto:support@vpsttt.com">support@vpsttt.com</a>
+      <a href="/privacy">Chính sách riêng tư</a>
+      <a href="/account-deletion">Xóa tài khoản</a>
+      <a href="/terms">Điều khoản</a>
+      <a href="/acceptable-use">Sử dụng hợp lệ</a>
+      <a href="/support">Hỗ trợ</a>
     </footer>
 
     <script src="./app.js" defer></script>

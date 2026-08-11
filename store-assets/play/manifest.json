@@ -1,0 +1,47 @@
+{
+  "generator": "scripts/generate-store-assets.mjs",
+  "inputs": {
+    "logo": {
+      "path": "public/brand/logo_webtui.png",
+      "sha256": "ce44eabb69b7e078b581ef7518adca938487729877289dbebe5f2e1d3348dc45"
+    },
+    "phoneChatScreenshot": {
+      "path": "store-assets/source/phone-chat.png",
+      "sha256": "9539595af95646d79defbbea7bd9ec3462564d7ccd942d468bded10b0e8017f1"
+    },
+    "phoneConversationsScreenshot": {
+      "path": "store-assets/source/phone-conversations.png",
+      "sha256": "9a36e484470a1727194c2c975ded4dfcc4fd398b948bd336b082f50fb7c79af6"
+    }
+  },
+  "outputs": {
+    "store-assets/play/icon-512.png": {
+      "alpha": true,
+      "bytes": 198024,
+      "height": 512,
+      "sha256": "1ca23239a1814994079c86e7c4f647829713fa74e078ca18918f4a529e0ff114",
+      "width": 512
+    },
+    "store-assets/play/feature-graphic-1024x500.png": {
+      "alpha": false,
+      "bytes": 131075,
+      "height": 500,
+      "sha256": "5f56efcf6af4acce4676942a222cfde50eaf1afcc16de91f34ac7148f18bd396",
+      "width": 1024
+    },
+    "store-assets/play/phone/01-chat-432x864.png": {
+      "alpha": false,
+      "bytes": 12371,
+      "height": 864,
+      "sha256": "9f7959e32f0ca9330b76e11c7af826ebc6a7ac62afad626ec8d69decc7b305fb",
+      "width": 432
+    },
+    "store-assets/play/phone/02-conversations-432x864.png": {
+      "alpha": false,
+      "bytes": 17508,
+      "height": 864,
+      "sha256": "5271e69001517fb3dbdf54322581611243e9c4ddfb76923982406b4697980337",
+      "width": 432
+    }
+  }
+}

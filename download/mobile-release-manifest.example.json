@@ -7,10 +7,11 @@
   "recommended_version": "1.0.0",
   "version": "1.0.0",
   "version_code": 100,
-  "download_url": "https://download.vpsttt.com/downloads/files/android/stable/app-prod-release.apk",
-  "store_url": "",
-  "checksum_sha256": "replace-with-apk-sha256",
-  "aab_checksum_sha256": "replace-with-aab-sha256",
+  "download_url": "",
+  "store_url": "https://play.google.com/store/apps/details?id=com.vpsttt.webtui_chat",
+  "checksum_sha256": "",
+  "signer_sha256": "",
+  "play_app_signing_sha256": "",
   "required": false,
-  "release_notes": "Internal Android release."
+  "release_notes": "Example Play-first Android release."
 }

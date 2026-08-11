@@ -11,6 +11,7 @@ export default tseslint.config(
     languageOptions: {
       globals: {
         AbortController: "readonly",
+        AbortSignal: "readonly",
         DOMException: "readonly",
         fetch: "readonly",
         React: "readonly",

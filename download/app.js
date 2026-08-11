@@ -1,12 +1,14 @@
 const fallbackManifest = {
   platform: "android",
   channel: "stable",
-  version: "1.0.0",
-  version_code: 100,
-  download_url: "/downloads/files/android/stable/app-prod-release.apk",
+  version: "pending",
+  version_code: 0,
+  download_url: "",
   store_url: "",
-  checksum_sha256: "replace-with-apk-sha256",
-  release_notes: "Internal Android release."
+  checksum_sha256: "",
+  signer_sha256: "",
+  play_app_signing_sha256: "",
+  release_notes: "Kênh phân phối Android chưa được mở."
 };
 
 const manifestCandidates = [
@@ -22,10 +24,19 @@ const text = (id, value) => {
   }
 };
 
-const attr = (id, name, value) => {
-  const node = document.getElementById(id);
-  if (node && value) {
-    node.setAttribute(name, value);
+const normalizedSha256 = (value) =>
+  String(value || "")
+    .replace(/[^0-9a-f]/gi, "")
+    .toUpperCase();
+
+const safeHttpsUrl = (value, allowedHosts) => {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === "https:" && allowedHosts.includes(parsed.hostname)
+      ? parsed.toString()
+      : "";
+  } catch {
+    return "";
   }
 };
 
@@ -47,21 +58,47 @@ function renderManifest(manifest) {
   const version = manifest.version || manifest.current_version || "unknown";
   const versionCode = manifest.version_code || "-";
   const channel = manifest.channel || "stable";
-  const checksum = manifest.checksum_sha256 || "SHA-256 pending";
+  const checksum = normalizedSha256(manifest.checksum_sha256);
   const releaseNotes = manifest.release_notes || "Chưa có ghi chú phát hành.";
 
   text("versionLabel", version);
   text("versionCodeLabel", String(versionCode));
   text("channelLabel", channel);
-  text("checksumValue", checksum);
+  text("checksumValue", checksum || "Chưa có artifact public đã xác minh");
   text("releaseNotes", releaseNotes);
-  attr("apkLink", "href", manifest.download_url || fallbackManifest.download_url);
 
   const storeLink = document.getElementById("storeLink");
-  if (storeLink && manifest.store_url) {
-    storeLink.href = manifest.store_url;
+  const storeUrl = safeHttpsUrl(manifest.store_url, [
+    "play.google.com",
+    "market.android.com"
+  ]);
+  if (storeLink && storeUrl) {
+    storeLink.href = storeUrl;
     storeLink.hidden = false;
   }
+
+  const signer = normalizedSha256(manifest.signer_sha256);
+  const playSigner = normalizedSha256(manifest.play_app_signing_sha256);
+  const downloadUrl = safeHttpsUrl(manifest.download_url, [
+    globalThis.location.hostname
+  ]);
+  const directDownloadVerified =
+    downloadUrl &&
+    checksum.length === 64 &&
+    signer.length === 64 &&
+    signer === playSigner;
+  const apkLink = document.getElementById("apkLink");
+  if (apkLink && directDownloadVerified) {
+    apkLink.href = downloadUrl;
+    apkLink.hidden = false;
+  }
+
+  text(
+    "distributionStatus",
+    storeUrl || directDownloadVerified
+      ? "Chỉ dùng kênh phát hành đã xác minh bên dưới."
+      : "Bản Android production chưa được mở để tải."
+  );
 }
 
 fetchManifest().then(renderManifest);

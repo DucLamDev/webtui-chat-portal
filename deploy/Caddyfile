@@ -7,8 +7,25 @@
 	encode zstd gzip
 
 	redir /download /download/ 308
-	redir /account-deletion /download/account-deletion.html 308
-	redir /privacy /download/privacy.html 308
+	redir /download/account-deletion.html {$PORTAL_BASE_PATH}/account-deletion 308
+	redir /download/privacy.html {$PORTAL_BASE_PATH}/privacy 308
+	respond /download/dev-download.html 404
+	respond /download/android/dev/* 404
+	respond /downloads/files/android/dev/* 404
+
+	# Digital Asset Links must be returned directly (no redirect) from the exact
+	# Android app-link host. AASA is 200 only when ENABLE_IOS_ASSOCIATION=true;
+	# the portal returns 404 in Play-only mode. When APP_LINK_ORIGIN is a different
+	# host, that app host/backend must expose the same status/payload without redirect.
+	handle /.well-known/assetlinks.json {
+		rewrite * {$PORTAL_BASE_PATH}{uri}
+		reverse_proxy portal:3002
+	}
+
+	handle /.well-known/apple-app-site-association {
+		rewrite * {$PORTAL_BASE_PATH}{uri}
+		reverse_proxy portal:3002
+	}
 
 	handle_path /download/* {
 		root * /srv/download
@@ -30,5 +47,6 @@
 		X-Content-Type-Options "nosniff"
 		X-Frame-Options "DENY"
 		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), geolocation=(), microphone=()"
 	}
 }

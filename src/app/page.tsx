@@ -8,31 +8,14 @@ import {
   Smartphone
 } from "@/components/icons";
 import { DomainOnboarding } from "@/components/domain-onboarding";
-
-const desktopDownloadUrl =
-  process.env.NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL ??
-  "https://download.vpsttt.com/download/";
-const mobileDownloadUrl =
-  process.env.NEXT_PUBLIC_MOBILE_DOWNLOAD_URL ??
-  "https://download.vpsttt.com/download/";
-const documentationUrl =
-  process.env.NEXT_PUBLIC_DOCUMENTATION_URL ??
-  "https://download.vpsttt.com/#self-host";
-const portalBasePath = process.env.NEXT_PUBLIC_PORTAL_BASE_PATH ?? "";
+import { SiteFooter, SiteHeader } from "@/components/site-shell";
+import { readPublicComplianceConfig } from "@/lib/public-config";
 
 export default function PortalHomePage() {
+  const config = readPublicComplianceConfig();
   return (
     <main>
-      <header className="site-header">
-        <a className="brand" href={portalBasePath || "/"} aria-label="WebTUI Chat Portal">
-          <img alt="" height="42" src={`${portalBasePath}/brand/logo_webtui.png`} width="42" />
-          <span><strong>WebTUI Chat</strong><small>Self-hosted portal</small></span>
-        </a>
-        <nav aria-label="Điều hướng chính">
-          <a href="#downloads">Tải ứng dụng</a>
-          <a href={documentationUrl}>Tài liệu <ExternalLink size={14} /></a>
-        </nav>
-      </header>
+      <SiteHeader config={config} />
 
       <DomainOnboarding />
 
@@ -67,17 +50,17 @@ export default function PortalHomePage() {
           <p>Không cần build app riêng. Mở app, nhập domain công ty và đăng nhập.</p>
         </div>
         <div className="download-links">
-          <a href={desktopDownloadUrl}>
+          <a href={config.desktopDownloadUrl}>
             <Monitor size={24} />
             <span><strong>Desktop app</strong><small>Windows, macOS và Linux</small></span>
             <Download size={18} />
           </a>
-          <a href={mobileDownloadUrl}>
+          <a href={config.mobileDownloadUrl}>
             <Smartphone size={24} />
             <span><strong>Mobile app</strong><small>Android và iOS</small></span>
             <Download size={18} />
           </a>
-          <a href={documentationUrl}>
+          <a href={config.documentationUrl}>
             <FileText size={24} />
             <span><strong>Tài liệu self-host</strong><small>Cài đặt, backup và cập nhật</small></span>
             <ExternalLink size={18} />
@@ -85,11 +68,7 @@ export default function PortalHomePage() {
         </div>
       </section>
 
-      <footer>
-        <span>WebTUI Chat</span>
-        <p>Portal không lưu nội dung chat, mật khẩu hoặc token của instance.</p>
-        <a href={`${portalBasePath}/account-deletion`}>Xóa tài khoản</a>
-      </footer>
+      <SiteFooter config={config} />
     </main>
   );
 }

@@ -6,23 +6,46 @@ services:
       context: ..
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL: ${DESKTOP_DOWNLOAD_URL}
-        NEXT_PUBLIC_DOCUMENTATION_URL: ${DOCUMENTATION_URL}
-        NEXT_PUBLIC_MOBILE_DOWNLOAD_URL: ${MOBILE_DOWNLOAD_URL}
+        NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL: ${DESKTOP_DOWNLOAD_URL:?required}
+        NEXT_PUBLIC_DOCUMENTATION_URL: ${DOCUMENTATION_URL:?required}
+        NEXT_PUBLIC_MOBILE_DOWNLOAD_URL: ${MOBILE_DOWNLOAD_URL:?required}
         NEXT_PUBLIC_PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-}
-        NEXT_PUBLIC_SUPPORT_EMAIL: ${SUPPORT_EMAIL:-support@vpsttt.com}
+        ACCOUNT_DELETION_COMPLETION_DAYS: ${ACCOUNT_DELETION_COMPLETION_DAYS:?required}
+        APPLE_BUNDLE_ID: ${APPLE_BUNDLE_ID:-}
+        APPLE_TEAM_ID: ${APPLE_TEAM_ID:-}
+        APP_LINK_ORIGIN: ${APP_LINK_ORIGIN:?required}
+        ENABLE_IOS_ASSOCIATION: ${ENABLE_IOS_ASSOCIATION:-false}
+        LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:?required}
+        LEGAL_ENTITY_COUNTRY: ${LEGAL_ENTITY_COUNTRY:?required}
+        LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:?required}
+        MODERATION_EVIDENCE_RETENTION_DAYS: ${MODERATION_EVIDENCE_RETENTION_DAYS:?required}
+        PLAY_APP_SIGNING_SHA256_FINGERPRINTS: ${PLAY_APP_SIGNING_SHA256_FINGERPRINTS:?required}
+        POLICY_EFFECTIVE_DATE: ${POLICY_EFFECTIVE_DATE:?required}
+        POLICY_VERSION: ${POLICY_VERSION:?required}
+        PORTAL_ORIGIN: ${PORTAL_ORIGIN:?required}
+        PRIVACY_CONTACT_EMAIL: ${PRIVACY_CONTACT_EMAIL:?required}
+        SAFETY_CONTACT_EMAIL: ${SAFETY_CONTACT_EMAIL:?required}
+        SUPPORT_EMAIL: ${SUPPORT_EMAIL:?required}
+        SUPPORT_RESPONSE_HOURS: ${SUPPORT_RESPONSE_HOURS:?required}
+        UGC_REPORT_RESPONSE_HOURS: ${UGC_REPORT_RESPONSE_HOURS:?required}
     image: webtui-chat-portal:${PORTAL_VERSION:-latest}
     restart: unless-stopped
     expose: ["3002"]
     networks: [portal]
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:3002/"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
   caddy:
-    image: caddy:2.10-alpine
+    image: caddy:2.10.2-alpine
     restart: unless-stopped
     environment:
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:?required}
       PORTAL_BASE_PATH: ${PORTAL_BASE_PATH:-}
-      PORTAL_DOMAIN: ${PORTAL_DOMAIN}
+      PORTAL_DOMAIN: ${PORTAL_DOMAIN:?required}
     ports:
       - "80:80"
       - "443:443"
@@ -35,7 +58,7 @@ services:
     networks: [portal]
     depends_on:
       portal:
-        condition: service_started
+        condition: service_healthy
 
 networks:
   portal:

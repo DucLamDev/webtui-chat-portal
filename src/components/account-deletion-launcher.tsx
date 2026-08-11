@@ -2,7 +2,11 @@
 
 import { type FormEvent, useState } from "react";
 import { ArrowRight, Globe2 } from "@/components/icons";
-import { normalizePortalServer, parsePortalDiscovery } from "@/lib/server-registration";
+import {
+  buildAccountDeletionEntry,
+  normalizePortalServer,
+  parsePortalDiscovery
+} from "@/lib/server-registration";
 
 export function AccountDeletionLauncher() {
   const [domain, setDomain] = useState("");
@@ -42,10 +46,7 @@ export function AccountDeletionLauncher() {
         throw new Error("Không tìm thấy instance WebTUI Chat đang hoạt động tại domain này.");
       }
       const server = parsePortalDiscovery(payload, target.origin);
-      const entry = new URL(server.entryUrl);
-      entry.searchParams.set("account_action", "delete");
-      entry.searchParams.set("source", "account-deletion");
-      window.location.assign(entry.toString());
+      window.location.assign(buildAccountDeletionEntry(server.entryUrl));
     } catch (cause) {
       setError(
         cause instanceof DOMException && cause.name === "AbortError"
@@ -82,7 +83,7 @@ export function AccountDeletionLauncher() {
         </button>
       </div>
       <small id="deletion-domain-help">
-        Portal chỉ kiểm tra domain rồi chuyển bạn thẳng tới server của tổ chức.
+        Portal kiểm tra domain rồi mở mục xóa tài khoản trên server của tổ chức.
       </small>
       <p aria-live="polite" className="form-message form-message--error" id="deletion-domain-status">
         {error}
