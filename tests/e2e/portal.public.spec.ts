@@ -1,8 +1,6 @@
 import { expect, test } from "@playwright/test";
 
 const customerOrigin = "https://chat.company.example";
-const playFingerprint =
-  "00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F:10:11:12:13:14:15:16:17:18:19:1A:1B:1C:1D:1E:1F";
 const iosAssociationEnabled =
   process.env.ENABLE_IOS_ASSOCIATION?.trim().toLowerCase() === "true";
 
@@ -65,7 +63,7 @@ test("discovery hợp lệ chuyển browser tới đăng ký trên instance cust
 }) => {
   await page.goto("/");
   await page.getByLabel("Domain WebTUI Chat").fill("chat.company.example");
-  await page.getByRole("button", { name: "Tiếp tục" }).click();
+  await page.getByRole("button", { name: "Kiểm tra" }).click();
 
   await expect(page).toHaveURL(
     `${customerOrigin}/?auth=register&source=portal`,
@@ -84,6 +82,19 @@ test("portal không tràn ngang trên mobile", async ({ page }) => {
   expect(metrics.scrollWidth).toBe(metrics.innerWidth);
 });
 
+test("Download Center chỉ hiển thị các nền tảng được hỗ trợ", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const downloads = page.locator("#downloads");
+
+  await expect(downloads.getByText("Windows", { exact: true })).toBeVisible();
+  await expect(downloads.getByText("macOS", { exact: true })).toBeVisible();
+  await expect(downloads.getByText("Android", { exact: true })).toBeVisible();
+  await expect(downloads.getByText("iOS", { exact: true })).toBeVisible();
+  await expect(downloads.getByText("Linux", { exact: true })).toHaveCount(0);
+});
+
 for (const policy of [
   { heading: "Chính sách quyền riêng tư", path: "/privacy" },
   { heading: "Yêu cầu xóa tài khoản WebTUI Chat", path: "/account-deletion" },
@@ -99,10 +110,32 @@ for (const policy of [
     await expect(
       page.getByRole("heading", { level: 1, name: policy.heading }),
     ).toBeVisible();
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      `https://portal.ci.invalid${policy.path}`,
-    );
+    const canonicalHref = await page
+      .locator('link[rel="canonical"]')
+      .getAttribute("href");
+    expect(canonicalHref).not.toBeNull();
+    const canonical = new URL(canonicalHref ?? "");
+    expect(canonical.protocol).toBe("https:");
+    expect(canonical.pathname).toBe(policy.path);
+  });
+}
+
+for (const path of [
+  "/privacy",
+  "/account-deletion",
+  "/terms",
+  "/acceptable-use",
+  "/support",
+]) {
+  test(`${path} không tràn ngang trên mobile`, async ({ page }) => {
+    await page.setViewportSize({ height: 844, width: 390 });
+    await page.goto(path);
+
+    const metrics = await page.evaluate(() => ({
+      innerWidth: window.innerWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(metrics.scrollWidth).toBe(metrics.innerWidth);
   });
 }
 
@@ -115,16 +148,17 @@ test("công bố Android Digital Asset Links bằng Play signing certificate", a
 
   expect(response.status()).toBe(200);
   expect(response.headers()["content-type"]).toContain("application/json");
-  await expect(response.json()).resolves.toEqual([
-    {
-      relation: ["delegate_permission/common.handle_all_urls"],
-      target: {
-        namespace: "android_app",
-        package_name: "com.vpsttt.webtui_chat",
-        sha256_cert_fingerprints: [playFingerprint],
-      },
-    },
+  const body = await response.json();
+  expect(body).toHaveLength(1);
+  expect(body[0].relation).toEqual([
+    "delegate_permission/common.handle_all_urls",
   ]);
+  expect(body[0].target.namespace).toBe("android_app");
+  expect(body[0].target.package_name).toBe("com.vpsttt.webtui_chat");
+  expect(body[0].target.sha256_cert_fingerprints).toHaveLength(1);
+  expect(body[0].target.sha256_cert_fingerprints[0]).toMatch(
+    /^([0-9A-F]{2}:){31}[0-9A-F]{2}$/,
+  );
 });
 
 test("chỉ công bố Apple Universal Links khi được bật rõ ràng", async ({

@@ -33,9 +33,9 @@ function productionFixture(): NodeJS.ProcessEnv {
     POLICY_EFFECTIVE_DATE: "2026-08-07",
     POLICY_VERSION: "2026-08-07",
     PORTAL_ORIGIN: "https://download.vpsttt.com",
-    PRIVACY_CONTACT_EMAIL: "privacy@vpsttt.com",
-    SAFETY_CONTACT_EMAIL: "safety@vpsttt.com",
-    SUPPORT_EMAIL: "support@vpsttt.com",
+    PRIVACY_CONTACT_EMAIL: "lienhe@vpsttt.com",
+    SAFETY_CONTACT_EMAIL: "lienhe@vpsttt.com",
+    SUPPORT_EMAIL: "lienhe@vpsttt.com",
     SUPPORT_RESPONSE_HOURS: "72",
     UGC_REPORT_RESPONSE_HOURS: "72",
   };

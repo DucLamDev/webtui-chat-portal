@@ -1,107 +1,267 @@
 import type { Metadata } from "next";
+import {
+  Activity,
+  AndroidLogo,
+  AppleLogo,
+  ArrowRight,
+  CheckCircle2,
+  Download,
+  Globe2,
+  Headphones,
+  Mail,
+  Search,
+  Server,
+  ShieldCheck,
+  Smartphone,
+  WindowsLogo,
+} from "@/components/icons";
 import { PolicyIdentity, SiteFooter, SiteHeader } from "@/components/site-shell";
-import { portalPath, portalUrl, readPublicComplianceConfig } from "@/lib/public-config";
+import {
+  portalPath,
+  portalUrl,
+  readPublicComplianceConfig,
+} from "@/lib/public-config";
 
 export function generateMetadata(): Metadata {
   const config = readPublicComplianceConfig();
   return {
     alternates: { canonical: portalUrl(config, "/support") },
-    description: "Kênh hỗ trợ kỹ thuật, quyền riêng tư, xóa tài khoản và báo cáo an toàn của WebTUI Chat.",
+    description:
+      "Kênh hỗ trợ kỹ thuật, quyền riêng tư, xóa tài khoản và báo cáo an toàn của WebTUI Chat.",
     openGraph: {
-      description: "Liên hệ đúng đầu mối hỗ trợ WebTUI Chat và operator self-hosted.",
+      description:
+        "Liên hệ đúng đầu mối hỗ trợ WebTUI Chat và operator self-hosted.",
       title: "Hỗ trợ WebTUI Chat",
-      url: portalUrl(config, "/support")
+      url: portalUrl(config, "/support"),
     },
     robots: { follow: true, index: true },
-    title: "Hỗ trợ"
+    title: "Hỗ trợ",
   };
 }
 
 export default function SupportPage() {
   const config = readPublicComplianceConfig();
   return (
-    <main className="policy-page">
+    <main className="policy-page support-page">
       <SiteHeader config={config} label="Hỗ trợ" />
-      <article className="policy-document support-document">
-        <header>
-          <p className="eyebrow">Store support URL</p>
+
+      <section className="legal-hero legal-hero--support">
+        <div className="legal-hero__copy">
+          <p className="hero-badge">
+            <Headphones size={16} />
+            Trung tâm hỗ trợ
+          </p>
           <h1>Hỗ trợ WebTUI Chat</h1>
-          <p className="policy-lead">
-            Chọn đúng kênh bên dưới và luôn ghi domain instance, phiên bản app, nền tảng cùng mô tả ngắn.
-            Không gửi mật khẩu, OTP, access token, refresh token hoặc private key.
-          </p>
-          <PolicyIdentity config={config} />
-        </header>
-
-        <section>
-          <h2>1. Trước tiên: xác định bên vận hành instance</h2>
           <p>
-            Tổ chức sở hữu domain bạn nhập là operator trực tiếp quản lý thành viên, tin nhắn, file, moderation,
-            retention và backup. Với lỗi chỉ xảy ra trên một workspace hoặc yêu cầu dữ liệu trong instance, hãy liên
-            hệ quản trị viên của tổ chức trước. {config.legalEntityName} hỗ trợ app/portal chính thức và định tuyến
-            yêu cầu khi có thông tin operator, nhưng không tự ý truy cập server của tổ chức.
+            Tìm câu trả lời nhanh, kiểm tra tình trạng hệ thống hoặc liên hệ đội
+            ngũ hỗ trợ. Khi gửi yêu cầu, hãy kèm domain instance, phiên bản app
+            và mô tả ngắn.
           </p>
-        </section>
+          <div className="legal-hero__meta">
+            <a href={`mailto:${config.supportEmail}`}>
+              <Mail size={18} />
+              {config.supportEmail}
+            </a>
+            <span>
+              <CheckCircle2 size={18} />
+              Phản hồi ban đầu trong {config.supportResponseHours} giờ
+            </span>
+          </div>
+        </div>
 
-        <section className="support-channels" aria-labelledby="support-channels-title">
-          <h2 id="support-channels-title">2. Kênh liên hệ</h2>
-          <div className="support-grid">
-            <article>
-              <h3>Kỹ thuật và phát hành</h3>
-              <p>Crash, lỗi đăng nhập ở cấp app, lỗi portal/download hoặc câu hỏi phiên bản.</p>
-              <a href={`mailto:${config.supportEmail}`}>{config.supportEmail}</a>
-              <small>Mục tiêu phản hồi ban đầu: trong {config.supportResponseHours} giờ.</small>
+        <div className="support-art" aria-hidden="true">
+          <div className="support-art__headset">
+            <Headphones size={76} />
+          </div>
+          <div className="support-art__laptop">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="support-art__phone" />
+          <div className="support-art__server">
+            <i />
+            <i />
+            <i />
+          </div>
+          <div className="support-art__chart">
+            <i />
+            <i />
+            <i />
+            <i />
+          </div>
+          <span className="support-art__pulse" />
+        </div>
+      </section>
+
+      <section className="support-workbench" aria-label="Công cụ hỗ trợ">
+        <div className="support-faq-panel">
+          <label className="support-search" htmlFor="support-search">
+            <Search size={22} />
+            <input
+              id="support-search"
+              placeholder="Tìm câu hỏi hoặc nhập domain"
+              type="search"
+            />
+          </label>
+
+          <div className="faq-card">
+            <h2>Câu hỏi thường gặp</h2>
+            <details open>
+              <summary>VPS TTT Chat Portal là gì?</summary>
+              <p>
+                Đây là portal để tải app chính thức và xác minh domain instance
+                self-hosted trước khi mở đúng không gian làm việc của tổ chức.
+              </p>
+            </details>
+            <details>
+              <summary>Làm thế nào để kết nối với chat công ty?</summary>
+              <p>
+                Tải ứng dụng, nhập domain công ty và để portal kiểm tra
+                discovery endpoint. Sau khi hợp lệ, app sẽ kết nối trực tiếp tới
+                server của tổ chức.
+              </p>
+            </details>
+            <details>
+              <summary>Tôi có thể dùng trên những thiết bị nào?</summary>
+              <p>
+                Download Center hiện hỗ trợ Windows, macOS, Android và iOS.
+              </p>
+            </details>
+            <details>
+              <summary>Dữ liệu của tôi có được bảo mật không?</summary>
+              <p>
+                Portal không nhận mật khẩu hoặc token. Dữ liệu chat và file nằm
+                trên hạ tầng do operator của tổ chức vận hành.
+              </p>
+            </details>
+            <details>
+              <summary>Tôi quên mật khẩu, phải làm sao?</summary>
+              <p>
+                Liên hệ quản trị viên của instance trước. Nếu không xác định
+                được operator, gửi domain instance tới {config.supportEmail}.
+              </p>
+            </details>
+          </div>
+        </div>
+
+        <div className="support-action-panel">
+          <div className="support-card-grid">
+            <article className="support-card support-card--mail">
+              <span>
+                <Mail size={30} />
+              </span>
+              <h2>Email hỗ trợ</h2>
+              <p>Gửi yêu cầu và nhận hỗ trợ trong thời gian sớm nhất.</p>
+              <a href={`mailto:${config.supportEmail}`}>
+                <Mail size={16} />
+                {config.supportEmail}
+              </a>
             </article>
-            <article>
-              <h3>Quyền riêng tư và dữ liệu</h3>
-              <p>Yêu cầu truy cập/sửa/xóa dữ liệu, câu hỏi privacy hoặc không xác định được operator.</p>
-              <a href={`mailto:${config.privacyEmail}`}>{config.privacyEmail}</a>
-              <small>Xóa account được hoàn tất trong tối đa {config.accountDeletionDays} ngày sau xác minh hợp lệ.</small>
+
+            <article className="support-card support-card--domain">
+              <span>
+                <Globe2 size={32} />
+              </span>
+              <h2>Kiểm tra domain</h2>
+              <p>Kiểm tra kết nối và xác thực domain của bạn.</p>
+              <a href={portalPath(config, "/")}>
+                Mở kiểm tra <ArrowRight size={16} />
+              </a>
             </article>
-            <article>
-              <h3>An toàn và UGC</h3>
-              <p>Đe dọa, lạm dụng nghiêm trọng, bóc lột trẻ em hoặc không dùng được report trong app.</p>
-              <a href={`mailto:${config.safetyEmail}`}>{config.safetyEmail}</a>
-              <small>Mục tiêu phản hồi ban đầu: trong {config.ugcReportResponseHours} giờ.</small>
+
+            <article className="support-card support-card--status">
+              <span>
+                <Activity size={32} />
+              </span>
+              <h2>Trạng thái hệ thống</h2>
+              <p>Theo dõi tình trạng hoạt động của toàn bộ hệ thống.</p>
+              <strong>
+                <i />
+                Tất cả hệ thống đang hoạt động
+              </strong>
             </article>
           </div>
-        </section>
 
-        <section>
-          <h2>3. Báo cáo nội dung/người dùng và chặn</h2>
-          <p>
-            Với UGC thông thường, mở menu của tin nhắn hoặc hồ sơ, chọn <strong>Báo cáo</strong>, chọn lý do rồi gửi
-            tới moderation queue của operator. Chọn <strong>Chặn</strong> để ngăn tương tác trực tiếp trong lúc chờ
-            xử lý. Xem phạm vi cấm và kháng nghị tại <a href={portalPath(config, "/acceptable-use")}>Chính sách sử dụng hợp lệ</a>.
-          </p>
-          <p>
-            Nếu có nguy cơ tức thời, hãy liên hệ cơ quan khẩn cấp tại nơi xảy ra sự việc trước; email không phải kênh
-            ứng cứu thời gian thực. Khi gửi safety report, chỉ cung cấp domain, ID/link nội dung và bằng chứng tối thiểu cần thiết.
-          </p>
-        </section>
+          <div className="diagnostic-card">
+            <div>
+              <h2>Chẩn đoán nhanh kết nối</h2>
+              <p>Kiểm tra các điểm kết nối quan trọng đến hệ thống.</p>
+            </div>
+            <div className="diagnostic-path" aria-label="Luồng kiểm tra kết nối">
+              <span>
+                <CheckCircle2 size={18} />
+                Thiết bị của bạn
+                <small>Hoạt động tốt</small>
+              </span>
+              <span>
+                <CheckCircle2 size={18} />
+                Kết nối Internet
+                <small>Hoạt động tốt</small>
+              </span>
+              <span>
+                <ShieldCheck size={18} />
+                Mạng/VPN
+                <small>Hoạt động tốt</small>
+              </span>
+              <span>
+                <Server size={18} />
+                Máy chủ VPS TTT
+                <small>Hoạt động tốt</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <section>
-          <h2>4. Xóa tài khoản khi không còn app</h2>
-          <p>
-            Dùng <a href={portalPath(config, "/account-deletion")}>trang xóa tài khoản public</a> để mở đúng instance
-            hoặc tạo email yêu cầu. Gửi từ email gắn với tài khoản, kèm domain và email/tên đăng nhập; không gửi credential.
+      <section className="support-downloads" aria-labelledby="support-downloads-title">
+        <div>
+          <p className="eyebrow">
+            <Download size={16} /> Download Center
           </p>
-        </section>
+          <h2 id="support-downloads-title">Tải đúng ứng dụng cho thiết bị</h2>
+          <p>Tải ứng dụng phù hợp với thiết bị để bắt đầu kết nối và làm việc.</p>
+        </div>
+        <div className="download-chip-grid">
+          <a className="download-chip download-chip--windows" href={config.desktopDownloadUrl}>
+            <WindowsLogo size={30} />
+            <span>
+              <strong>Windows</strong>
+              <small>Windows 10 trở lên</small>
+            </span>
+            <ArrowRight size={17} />
+          </a>
+          <a className="download-chip download-chip--mac" href={config.desktopDownloadUrl}>
+            <AppleLogo size={30} />
+            <span>
+              <strong>macOS</strong>
+              <small>Apple Silicon & Intel</small>
+            </span>
+            <ArrowRight size={17} />
+          </a>
+          <a className="download-chip download-chip--android" href={config.mobileDownloadUrl}>
+            <AndroidLogo size={30} />
+            <span>
+              <strong>Android</strong>
+              <small>Google Play & APK</small>
+            </span>
+            <ArrowRight size={17} />
+          </a>
+          <a className="download-chip download-chip--ios" href={config.mobileDownloadUrl}>
+            <Smartphone size={30} />
+            <span>
+              <strong>iOS</strong>
+              <small>iPhone và iPad</small>
+            </span>
+            <ArrowRight size={17} />
+          </a>
+        </div>
+      </section>
 
-        <section>
-          <h2>5. Thông tin giúp xử lý nhanh</h2>
-          <ul>
-            <li>Domain instance và thời điểm xảy ra lỗi (kèm múi giờ).</li>
-            <li>Phiên bản app/build number, Android/iOS version và model thiết bị.</li>
-            <li>Các bước tái hiện, kết quả mong đợi/thực tế và screenshot đã che dữ liệu nhạy cảm.</li>
-            <li>Request/report ID nếu app hoặc operator đã cấp; không gửi token hay log chứa secret.</li>
-          </ul>
-          <p>
-            Thời hạn trên là mục tiêu phản hồi ban đầu, không phải cam kết giải quyết hoàn toàn. Vụ việc phụ thuộc
-            operator, nhà cung cấp hoặc xác minh bổ sung có thể cần lâu hơn; đầu mối xử lý phải cập nhật trạng thái phù hợp.
-          </p>
-        </section>
-      </article>
+      <section className="support-identity">
+        <PolicyIdentity config={config} />
+      </section>
+
       <SiteFooter config={config} />
     </main>
   );

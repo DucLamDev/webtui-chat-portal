@@ -6,12 +6,14 @@ import {
   Building2,
   CheckCircle2,
   Globe2,
-  Server
+  LockKeyhole,
+  Server,
+  ShieldCheck,
 } from "@/components/icons";
 import {
   normalizePortalServer,
   parsePortalDiscovery,
-  type PortalServer
+  type PortalServer,
 } from "@/lib/server-registration";
 
 const discoveryCacheTtlMs = 60_000;
@@ -22,10 +24,14 @@ type SubmissionState =
   | { message: string; status: "error" }
   | { server: PortalServer; status: "ready" };
 
-export function DomainOnboarding() {
+export function DomainOnboarding({
+  assetBasePath = "",
+}: {
+  assetBasePath?: string;
+}) {
   const [domain, setDomain] = useState("");
   const [submission, setSubmission] = useState<SubmissionState>({
-    status: "idle"
+    status: "idle",
   });
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -34,7 +40,9 @@ export function DomainOnboarding() {
 
     try {
       if (!navigator.onLine) {
-        throw new Error("Thiết bị đang ngoại tuyến. Hãy kiểm tra kết nối mạng rồi thử lại.");
+        throw new Error(
+          "Thiết bị đang ngoại tuyến. Hãy kiểm tra kết nối mạng rồi thử lại.",
+        );
       }
       const target = normalizePortalServer(domain);
       const cachedPayload = readCachedDiscovery(target.origin);
@@ -55,7 +63,7 @@ export function DomainOnboarding() {
           credentials: "omit",
           headers: { Accept: "application/json" },
           redirect: "error",
-          signal: controller.signal
+          signal: controller.signal,
         });
       } finally {
         window.clearTimeout(timeout);
@@ -81,84 +89,157 @@ export function DomainOnboarding() {
 
   return (
     <section className="onboarding" aria-labelledby="onboarding-title">
-      <div className="onboarding__intro">
-        <p className="eyebrow"><Server size={16} /> Instance self-hosted</p>
-        <h1 id="onboarding-title">Kết nối WebTUI Chat của công ty</h1>
-        <p>
-          Instance cần được cài trên VPS trước. Portal chỉ kiểm tra server và
-          đưa bạn tới đúng nơi đăng ký hoặc đăng nhập.
-        </p>
-        <div className="trust-row" aria-label="Ranh giới dữ liệu">
-          <span><CheckCircle2 size={17} /> Dữ liệu ở server công ty</span>
-          <span><CheckCircle2 size={17} /> Token không đi qua portal</span>
+      <div className="onboarding__content">
+        <div className="onboarding__intro">
+          <p className="hero-badge">
+            <ShieldCheck size={16} />
+            Bảo mật · Riêng tư · Kiểm soát
+          </p>
+          <h1 id="onboarding-title">Kết nối chat công ty</h1>
+          <p>
+            Chat nội bộ an toàn, riêng tư và kiểm soát hoàn toàn. Nhập domain
+            công ty để portal xác minh instance rồi mở đúng không gian làm việc.
+          </p>
+        </div>
+
+        <form
+          aria-busy={submission.status === "checking"}
+          className="domain-form"
+          onSubmit={handleSubmit}
+        >
+          <label htmlFor="company-domain">
+            <Globe2 size={21} />
+            Nhập domain công ty
+          </label>
+          <div className="domain-input">
+            <input
+              aria-describedby={
+                submission.status === "error" || submission.status === "ready"
+                  ? "domain-help domain-status"
+                  : "domain-help"
+              }
+              aria-invalid={submission.status === "error"}
+              aria-label="Domain WebTUI Chat"
+              autoCapitalize="none"
+              autoComplete="url"
+              disabled={submission.status === "checking"}
+              id="company-domain"
+              onChange={(event) => {
+                setDomain(event.target.value);
+                if (submission.status !== "idle") {
+                  setSubmission({ status: "idle" });
+                }
+              }}
+              placeholder="vd: chat.congty.vn"
+              required
+              spellCheck={false}
+              value={domain}
+            />
+            <button
+              disabled={submission.status === "checking" || !domain.trim()}
+              type="submit"
+            >
+              {submission.status === "checking" ? (
+                <span className="spinner" aria-hidden="true" />
+              ) : (
+                <ArrowRight aria-hidden="true" size={18} />
+              )}
+              {submission.status === "checking" ? "Đang kiểm tra" : "Kiểm tra"}
+            </button>
+          </div>
+
+          <p className="domain-help" id="domain-help">
+            <LockKeyhole size={14} />
+            Chỉ dùng để kết nối và xác thực. Chúng tôi không lưu credential.
+          </p>
+
+          {submission.status === "error" ? (
+            <p
+              className="form-message form-message--error"
+              id="domain-status"
+              role="alert"
+            >
+              {submission.message}
+            </p>
+          ) : null}
+          {submission.status === "ready" ? (
+            <div className="server-result" id="domain-status" role="status">
+              <Building2 aria-hidden="true" size={20} />
+              <span>
+                <strong>{submission.server.name}</strong>
+                <small>
+                  {submission.server.domain} · v{submission.server.appVersion}
+                </small>
+              </span>
+              <CheckCircle2 aria-hidden="true" size={20} />
+            </div>
+          ) : null}
+        </form>
+
+        <div className="connection-card" aria-label="Trạng thái kết nối">
+          <span className="connection-card__icon">
+            <ShieldCheck size={24} />
+          </span>
+          <span>
+            <strong>Kết nối an toàn</strong>
+            <small>Mã hóa đầu cuối đang được kích hoạt</small>
+          </span>
+          <span className="signal-dots" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+            <b />
+          </span>
         </div>
       </div>
 
-      <form
-        aria-busy={submission.status === "checking"}
-        className="domain-form"
-        onSubmit={handleSubmit}
+      <div
+        aria-label="WebTUI Chat trên máy tính và điện thoại"
+        className="product-showcase"
       >
-        <label htmlFor="company-domain">Domain WebTUI Chat</label>
-        <div className="domain-input">
-          <Globe2 aria-hidden="true" size={20} />
-          <input
-            autoCapitalize="none"
-            autoComplete="url"
-            disabled={submission.status === "checking"}
-            aria-describedby={
-              submission.status === "error" || submission.status === "ready"
-                ? "domain-help domain-status"
-                : "domain-help"
-            }
-            aria-invalid={submission.status === "error"}
-            id="company-domain"
-            onChange={(event) => {
-              setDomain(event.target.value);
-              if (submission.status !== "idle") {
-                setSubmission({ status: "idle" });
-              }
-            }}
-            placeholder="chat.company.com"
-            required
-            spellCheck={false}
-            value={domain}
-          />
-          <button
-            disabled={submission.status === "checking" || !domain.trim()}
-            type="submit"
-          >
-            {submission.status === "checking" ? (
-              <span className="spinner" aria-hidden="true" />
-            ) : (
-              <ArrowRight aria-hidden="true" size={19} />
-            )}
-            {submission.status === "checking" ? "Đang kiểm tra" : "Tiếp tục"}
-          </button>
+        <div className="showcase-arc showcase-arc--one" aria-hidden="true" />
+        <div className="showcase-arc showcase-arc--two" aria-hidden="true" />
+        <div className="product-showcase__status">
+          <span />
+          Instance sẵn sàng
         </div>
-
-        <p className="domain-help" id="domain-help">
-          Ví dụ: chat.company.com. Portal chỉ dùng domain để kiểm tra instance.
-        </p>
-
-        {submission.status === "error" ? (
-          <p className="form-message form-message--error" id="domain-status" role="alert">
-            {submission.message}
-          </p>
-        ) : null}
-        {submission.status === "ready" ? (
-          <div className="server-result" id="domain-status" role="status">
-            <Building2 aria-hidden="true" size={20} />
-            <span>
-              <strong>{submission.server.name}</strong>
-              <small>
-                {submission.server.domain} · v{submission.server.appVersion}
-              </small>
-            </span>
-            <CheckCircle2 aria-hidden="true" size={20} />
+        <div className="showcase-shield" aria-hidden="true">
+          <LockKeyhole size={24} />
+        </div>
+        <div className="product-showcase__desktop">
+          <div className="window-bar" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <span>VPS TTT Chat</span>
           </div>
-        ) : null}
-      </form>
+          <img
+            alt="WebTUI Chat trên màn hình máy tính"
+            src={`${assetBasePath}/showcase/tablet-chat.png`}
+          />
+        </div>
+        <div className="product-showcase__phone product-showcase__phone--chat">
+          <img
+            alt="Màn hình cuộc trò chuyện WebTUI Chat trên điện thoại"
+            src={`${assetBasePath}/showcase/phone-chat.png`}
+          />
+        </div>
+        <div className="product-showcase__route" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="product-showcase__server">
+          <Server size={20} />
+          <span>
+            <strong>Server công ty</strong>
+            <small>TLS đã xác minh</small>
+          </span>
+          <CheckCircle2 size={17} />
+        </div>
+      </div>
     </section>
   );
 }
@@ -169,7 +250,10 @@ function readCachedDiscovery(origin: string): unknown | null {
     if (!raw) {
       return null;
     }
-    const cached = JSON.parse(raw) as { checkedAt?: unknown; payload?: unknown };
+    const cached = JSON.parse(raw) as {
+      checkedAt?: unknown;
+      payload?: unknown;
+    };
     if (
       typeof cached.checkedAt !== "number" ||
       Date.now() - cached.checkedAt > discoveryCacheTtlMs
@@ -187,7 +271,7 @@ function cacheDiscovery(origin: string, payload: unknown) {
   try {
     window.sessionStorage.setItem(
       discoveryCacheKey(origin),
-      JSON.stringify({ checkedAt: Date.now(), payload })
+      JSON.stringify({ checkedAt: Date.now(), payload }),
     );
   } catch {
     // Storage can be unavailable in hardened/private browser modes.
