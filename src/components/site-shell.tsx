@@ -33,6 +33,8 @@ export function SiteHeader({
         <a href={portalPath(config, "/privacy")}>Bảo mật</a>
         <a href={portalPath(config, "/#downloads")}>Tải ứng dụng</a>
         <a href={portalPath(config, "/terms")}>Điều khoản</a>
+        <a href={portalPath(config, "/acceptable-use")}>Sử dụng hợp lệ</a>
+        <a href={portalPath(config, "/account-deletion")}>Xóa tài khoản</a>
         <a href={portalPath(config, "/support")}>Hỗ trợ</a>
       </nav>
 

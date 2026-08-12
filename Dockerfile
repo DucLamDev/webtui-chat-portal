@@ -8,9 +8,9 @@ RUN npm ci
 
 FROM deps AS build
 
-ARG NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL=https://download.vpsttt.com/download/
+ARG NEXT_PUBLIC_DESKTOP_DOWNLOAD_URL=https://download.webtui.vn/download/
 ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL
-ARG NEXT_PUBLIC_DOCUMENTATION_URL=https://download.vpsttt.com/#self-host
+ARG NEXT_PUBLIC_DOCUMENTATION_URL=https://download.webtui.vn/#self-host
 ARG NEXT_PUBLIC_PORTAL_BASE_PATH=
 ARG ACCOUNT_DELETION_COMPLETION_DAYS
 ARG APPLE_BUNDLE_ID

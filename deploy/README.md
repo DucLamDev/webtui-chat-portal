@@ -1,6 +1,6 @@
 # Deploy portal production
 
-Portal thường chạy tại `download.vpsttt.com`; app/deep-link host thường là
+Portal thường chạy tại `download.webtui.vn`; app/deep-link host thường là
 `chat.vpsttt.com`. `webtui-chat-self-host/deploy/self-hosted/compose.yml` **không
 có service portal** và không build repo này. Portal được deploy độc lập bằng
 `webtui-chat-portal/deploy/compose.yml` trên host/ingress phù hợp.
@@ -18,11 +18,11 @@ Không đưa URL policy vào Store Console trước khi các lệnh sau trả `2
 ngoài, certificate hợp lệ và không có interstitial/login:
 
 ```sh
-curl -fSsI https://download.vpsttt.com/privacy
-curl -fSsI https://download.vpsttt.com/account-deletion
-curl -fSsI https://download.vpsttt.com/terms
-curl -fSsI https://download.vpsttt.com/acceptable-use
-curl -fSsI https://download.vpsttt.com/support
+curl -fSsI https://download.webtui.vn/privacy
+curl -fSsI https://download.webtui.vn/account-deletion
+curl -fSsI https://download.webtui.vn/terms
+curl -fSsI https://download.webtui.vn/acceptable-use
+curl -fSsI https://download.webtui.vn/support
 ```
 
 ## 2. Cấu hình compliance bắt buộc

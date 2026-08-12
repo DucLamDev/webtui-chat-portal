@@ -57,7 +57,7 @@ association payload của official app lên domain của họ. Android Dynamic A
 không thêm arbitrary customer host ngoài host đã khai báo trong manifest.
 
 Nếu `APP_LINK_ORIGIN` khác `PORTAL_ORIGIN` (cấu hình mặc định là
-`chat.vpsttt.com` và `download.vpsttt.com`), backend/app host phải trả trực tiếp
+`chat.vpsttt.com` và `download.webtui.vn`), backend/app host phải trả trực tiếp
 Android assetlinks bằng payload từ portal (không redirect). Route AASA phải giữ
 `404/410` khi iOS bị tắt, hoặc trả đúng payload khi iOS được bật. Self-host compose
 không có service portal; xem topology tại [deploy/README.md](deploy/README.md).

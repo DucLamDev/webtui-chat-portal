@@ -19,8 +19,8 @@ function productionFixture(): NodeJS.ProcessEnv {
   return {
     ACCOUNT_DELETION_COMPLETION_DAYS: "30",
     APP_LINK_ORIGIN: "https://chat.vpsttt.com",
-    DESKTOP_DOWNLOAD_URL: "https://download.vpsttt.com/download/",
-    DOCUMENTATION_URL: "https://download.vpsttt.com/docs/",
+    DESKTOP_DOWNLOAD_URL: "https://download.webtui.vn/download/",
+    DOCUMENTATION_URL: "https://download.webtui.vn/docs/",
     ENABLE_IOS_ASSOCIATION: "false",
     LEGAL_ENTITY_ADDRESS: "123 Production Street, District 1",
     LEGAL_ENTITY_COUNTRY: "Việt Nam",
@@ -32,7 +32,7 @@ function productionFixture(): NodeJS.ProcessEnv {
     PLAY_APP_SIGNING_SHA256_FINGERPRINTS: playFingerprint.toLowerCase(),
     POLICY_EFFECTIVE_DATE: "2026-08-07",
     POLICY_VERSION: "2026-08-07",
-    PORTAL_ORIGIN: "https://download.vpsttt.com",
+    PORTAL_ORIGIN: "https://download.webtui.vn",
     PRIVACY_CONTACT_EMAIL: "lienhe@vpsttt.com",
     SAFETY_CONTACT_EMAIL: "lienhe@vpsttt.com",
     SUPPORT_EMAIL: "lienhe@vpsttt.com",
@@ -85,7 +85,7 @@ describe("public/store compliance configuration", () => {
     expect(config.playSigningFingerprints).toEqual([playFingerprint]);
     expect(config.moderationEvidenceRetentionDays).toBe(365);
     expect(portalUrl(config, "/privacy")).toBe(
-      "https://download.vpsttt.com/privacy",
+      "https://download.webtui.vn/privacy",
     );
   });
 
@@ -166,7 +166,7 @@ describe("public/store compliance configuration", () => {
 
   it("rejects an insecure or missing public release URL", () => {
     const env = productionFixture();
-    env.MOBILE_DOWNLOAD_URL = "http://download.vpsttt.com/app.apk";
+    env.MOBILE_DOWNLOAD_URL = "http://download.webtui.vn/app.apk";
     delete env.DOCUMENTATION_URL;
 
     expect(() => readPublicComplianceConfig(env)).toThrow(
@@ -194,7 +194,7 @@ describe("public/store compliance configuration", () => {
     expect(caddyfile).toContain("respond /download/dev-download.html 404");
     expect(dockerfile).toMatch(/^ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL\r?$/m);
     expect(dockerfile).not.toContain(
-      "ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL=https://download.vpsttt.com/download/",
+      "ARG NEXT_PUBLIC_MOBILE_DOWNLOAD_URL=https://download.webtui.vn/download/",
     );
   });
 

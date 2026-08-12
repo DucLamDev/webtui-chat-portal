@@ -1,6 +1,6 @@
 # Download Host Artifacts
 
-`download.vpsttt.com/download/` is a Play-first Android entrypoint. The ordinary
+`download.webtui.vn/download/` is a Play-first Android entrypoint. The ordinary
 CI APK is signed with the upload key and is not retained/published by the
 Play-first workflow. A public APK fallback is allowed only when its signer matches the Play app-signing
 certificate exactly.
@@ -28,7 +28,7 @@ publish the verified release artifacts under the host path below:
 - `android/stable/mobile-release-manifest.json`
 
 The canonical APK URL is
-`https://download.vpsttt.com/downloads/files/android/stable/app-prod-release.apk`.
+`https://download.webtui.vn/downloads/files/android/stable/app-prod-release.apk`.
 
 The manifest must include `signer_sha256` and `play_app_signing_sha256`. The page
 keeps the APK action hidden unless both normalize to the same 32-byte digest and
