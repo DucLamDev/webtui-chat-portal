@@ -3,7 +3,7 @@
   "inputs": {
     "logo": {
       "path": "public/brand/logo_webtui.png",
-      "sha256": "ce44eabb69b7e078b581ef7518adca938487729877289dbebe5f2e1d3348dc45"
+      "sha256": "6effe15ef1b4b864271778fc98ab754dd017aa1e8feef733804dacf6d9586bd1"
     },
     "phoneChatScreenshot": {
       "path": "store-assets/source/phone-chat.png",
@@ -17,16 +17,16 @@
   "outputs": {
     "store-assets/play/icon-512.png": {
       "alpha": true,
-      "bytes": 198024,
+      "bytes": 20548,
       "height": 512,
-      "sha256": "1ca23239a1814994079c86e7c4f647829713fa74e078ca18918f4a529e0ff114",
+      "sha256": "eb14dd717e7c1d45b7c91796dfe3fd04b7b6bb26e47644e4d84ba714353ca040",
       "width": 512
     },
     "store-assets/play/feature-graphic-1024x500.png": {
       "alpha": false,
-      "bytes": 131075,
+      "bytes": 74277,
       "height": 500,
-      "sha256": "5f56efcf6af4acce4676942a222cfde50eaf1afcc16de91f34ac7148f18bd396",
+      "sha256": "00339f7214d4e27bb2c324749b99652db858051844f107a4bacb066c81c7d353",
       "width": 1024
     },
     "store-assets/play/phone/01-chat-432x864.png": {
