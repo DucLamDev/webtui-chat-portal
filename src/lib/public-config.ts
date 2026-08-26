@@ -26,7 +26,7 @@ export type PublicComplianceConfig = {
 };
 
 const androidPackageName = "com.vpsttt.webtui_chat" as const;
-export const currentPolicyVersion = "2026-08-07";
+export const currentPolicyVersion = "2026-08-24";
 const placeholderPattern =
   /(?:change[ _-]?me|todo|tbd|placeholder|example\.(?:com|org|net)|your[ _-](?:company|name|address)|<[^>]+>)/i;
 const fingerprintPattern = /^(?:[0-9A-F]{2}:){31}[0-9A-F]{2}$/;
